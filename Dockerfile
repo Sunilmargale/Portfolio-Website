@@ -1,4 +1,4 @@
-# Stage 1: Build the React app
+# Stage 1: Build the React app --> final Dockerfile
 FROM node:alpine AS build
 WORKDIR /app
 
