@@ -15,14 +15,14 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/Sunilmargale/Zomato-CI-CD-project.git'
+                git branch: 'main', url: 'https://github.com/Sunilmargale/Portfolio-Website.git'
             }
         }
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=zomato \
-                    -Dsonar.projectKey=zomato '''
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Portfolio \
+                    -Dsonar.projectKey=Portfolio '''
                 }
             }
         }
@@ -53,21 +53,21 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker'){   
-                       sh "docker build -t zomato ."
-                       sh "docker tag zomato sunilmargale/zomato:latest "
-                       sh "docker push sunilmargale/zomato:latest "
+                       sh "docker build -t portfolio ."
+                       sh "docker tag portfolio sunilmargale/portfolio:latest "
+                       sh "docker push sunilmargale/portfolio:latest "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image sunilmargale/zomato:latest > trivy.txt" 
+                sh "trivy image sunilmargale/portfolio:latest > trivy.txt" 
             }
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name zomato -p 3000:3000 sunilmargale/zomato:latest'
+                sh 'docker run -d --name portfolio -p 3000:3000 sunilmargale/portfolio:latest'
             }
         }
     }
