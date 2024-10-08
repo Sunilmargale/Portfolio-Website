@@ -1,35 +1,35 @@
 # Stage 1: Build the React app --> final Dockerfile
-FROM node:alpine AS build
-WORKDIR /app
+#FROM node:alpine AS build
+#WORKDIR /app
 
 # Copy only package.json and package-lock.json
-COPY package*.json ./
+#COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --production
+#RUN npm ci --production
 
 # Copy the rest of the application code
-COPY . .
+#COPY . .
 
 # Build the app
-RUN npm run build
+#RUN npm run build
 
 # Stage 2: Serve the app with Nginx
-FROM nginx:alpine
-RUN rm -rf /usr/share/nginx/html/*
+#FROM nginx:alpine
+#RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the built React app from the previous stage
-COPY --from=build /app/build /usr/share/nginx/html
+#COPY --from=build /app/build /usr/share/nginx/html
 
 # stage 01 it is a first step to resuce docker image size
-#FROM node:alpine
-#WORKDIR /app
-#COPY package*.json ./
-#RUN npm install
-#COPY . .
-#RUN npm run build
-#EXPOSE 3000
-#CMD ["npm", "run", "start"]
+FROM node:alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["npm", "run", "start"]
 
 
 # stage 01 it is a first step to resuce docker image size
